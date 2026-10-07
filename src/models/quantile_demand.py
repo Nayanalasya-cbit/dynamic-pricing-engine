@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import lightgbm as lgb
+import joblib
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 
@@ -95,8 +96,11 @@ def train_quantile_models():
     )
 
     print("P10 model complete.")
+    joblib.dump(
+    p10_model,
+    "models/quantile_p10.pkl"
+    )
 
-    print("\nTraining P50 model...")
 
     p50_model, p50_predictions = train_quantile_model(
         X_train,
@@ -106,6 +110,10 @@ def train_quantile_models():
     )
 
     print("P50 model complete.")
+    joblib.dump(
+    p50_model,
+    "models/quantile_p50.pkl"
+)
 
     print("\nTraining P90 model...")
 
@@ -117,6 +125,10 @@ def train_quantile_models():
     )
 
     print("P90 model complete.")
+    joblib.dump(
+    p90_model,
+    "models/quantile_p90.pkl"
+)
 
     print("\nCalculating metrics...")
 
