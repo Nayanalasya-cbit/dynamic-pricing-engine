@@ -1,5 +1,7 @@
+import numpy as np
 import pandas as pd
 import joblib
+
 
 DATA_PATH = "data/processed/m5_features.csv"
 
@@ -90,3 +92,17 @@ if __name__ == "__main__":
             f"Demand {row['predicted_demand']:.2f} | "
             f"Change {demand_change:.2f}%"
         )
+        
+    valid = result[result["predicted_demand"] > 0]
+
+    if len(valid) >= 2:
+        elasticity = np.polyfit(
+            np.log(valid["price"]),
+            np.log(valid["predicted_demand"]),
+            1
+        )[0]
+
+        print("\nModel-Implied Price Sensitivity")
+        print("=" * 40)
+        print(f"Estimated elasticity: {elasticity:.4f}")
+        print("Interpretation: model-implied, not causal.")
