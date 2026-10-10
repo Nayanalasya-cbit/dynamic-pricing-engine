@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import lightgbm as lgb
+import joblib
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 INPUT_PATH = "data/processed/m5_features.csv"
@@ -35,7 +36,6 @@ def train_lightgbm():
     X = df[features]
     y = df[target]
 
-    # Same time-based split as the baseline
     split_date = df["date"].quantile(0.8)
 
     train_mask = df["date"] <= split_date
@@ -66,6 +66,9 @@ def train_lightgbm():
         X_train,
         y_train
     )
+
+    joblib.dump(model, "models/lightgbm_demand.pkl")
+    print("Model saved to models/lightgbm_demand.pkl")
 
     predictions = model.predict(X_test)
 
